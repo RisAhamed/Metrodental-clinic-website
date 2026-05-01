@@ -10,9 +10,38 @@ const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-cor
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", weight: ["400", "500"] })
 
 export const metadata: Metadata = {
-  title: "Metro Dental Clinic | Your Smile. Our Commitment.",
-  description: "Trusted dental care in Chennai since 2002, offering preventive, cosmetic, laser, orthodontic, and implant dentistry.",
+  metadataBase: new URL("https://v0-metrodentalclinic.vercel.app"),
+  title: {
+    default: "Metro Dental Clinic | Your Smile, Our Care.",
+    template: "%s | Metro Dental Clinic",
+  },
+  description: "Your Smile, Our Care. Trusted dental care in Chennai since 2002, offering gentle checkups, cosmetic dentistry, laser care, braces, implants, and emergency dental support.",
+  alternates: {
+    canonical: "/",
+  },
   generator: "v0.app",
+  openGraph: {
+    title: "Metro Dental Clinic | Your Smile, Our Care.",
+    description: "Trusted dental care in Chennai since 2002. Gentle, precise treatments for healthier, brighter smiles.",
+    url: "https://v0-metrodentalclinic.vercel.app",
+    siteName: "Metro Dental Clinic",
+    images: [
+      {
+        url: "/images/Smiling%20Image.jpg",
+        width: 2560,
+        height: 1920,
+        alt: "A bright healthy smile representing Metro Dental Clinic care",
+      },
+    ],
+    locale: "en_IN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Metro Dental Clinic | Your Smile, Our Care.",
+    description: "Trusted dental care in Chennai since 2002. Gentle, precise treatments for healthier, brighter smiles.",
+    images: ["/images/Smiling%20Image.jpg"],
+  },
   icons: {
     icon: [
       { url: "/icon-light-32x32.png", media: "(prefers-color-scheme: light)" },
