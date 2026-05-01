@@ -2,36 +2,48 @@
 
 import { useEffect, useRef, useState } from "react"
 
+function CountUp({ value, suffix = "", active }: { value: number; suffix?: string; active: boolean }) {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    if (!active) return
+    let frame = 0
+    const totalFrames = 80
+    const start = performance.now()
+    const tick = (time: number) => {
+      const progress = Math.min((time - start) / 1600, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCount(Math.round(value * eased))
+      frame += 1
+      if (progress < 1 && frame < totalFrames + 20) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  }, [active, value])
+
+  return <>{count.toLocaleString("en-IN")}{suffix}</>
+}
+
 export function VisionSection() {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.2 }
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
+    const observer = new IntersectionObserver(([entry]) => entry.isIntersecting && setIsVisible(true), { threshold: 0.2 })
+    if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
   }, [])
 
+  const stats = [
+    { value: 22, suffix: "+", label: "Years of Experience" },
+    { value: 10000, suffix: "+", label: "Happy Patients" },
+    { value: 20, suffix: "+", label: "Dental Services" },
+    { value: 2, suffix: "", label: "Clinic Locations" },
+  ]
+
   return (
-    <section 
-      ref={sectionRef}
-      id="vision"
-      className="relative py-32 md:py-48 lg:py-64 overflow-hidden"
-    >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 pointer-events-none">
-        <svg className="absolute top-0 left-0 w-full h-full opacity-[0.03]" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <section ref={sectionRef} id="stats" className="relative overflow-hidden py-32 md:py-48 lg:py-64">
+      <div className="pointer-events-none absolute inset-0">
+        <svg className="absolute left-0 top-0 h-full w-full opacity-[0.03]" viewBox="0 0 100 100" preserveAspectRatio="none">
           <defs>
             <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
               <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.5" />
@@ -41,103 +53,40 @@ export function VisionSection() {
         </svg>
       </div>
 
-      <div className="max-w-[1800px] mx-auto px-6 md:px-12 lg:px-20">
-        <div className="grid lg:grid-cols-12 gap-16 lg:gap-20">
-          {/* Section Label */}
+      <div className="mx-auto max-w-[1800px] px-6 md:px-12 lg:px-20">
+        <div className="grid gap-16 lg:grid-cols-12 lg:gap-20">
           <div className="lg:col-span-2">
-            <div 
-              className="flex items-center gap-4"
-              style={{
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? "translateX(0)" : "translateX(-20px)",
-                transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
-              }}
-            >
-              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">(01)</span>
-              <div className="w-8 h-px bg-border" />
-              <span className="text-xs tracking-[0.3em] uppercase text-muted-foreground">Vision</span>
+            <div className="flex items-center gap-4" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateX(0)" : "translateX(-20px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)" }}>
+              <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">(01)</span>
+              <div className="h-px w-8 bg-border" />
+              <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Care</span>
             </div>
           </div>
 
-          {/* Main Content */}
           <div className="lg:col-span-10">
             <div className="space-y-16 md:space-y-24">
-              {/* Large Statement */}
               <div className="overflow-hidden">
-                <h2 
-                  className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] tracking-[-0.01em] text-foreground max-w-5xl text-pretty"
-                  style={{
-                    opacity: isVisible ? 1 : 0,
-                    transform: isVisible ? "translateY(0)" : "translateY(60px)",
-                    transitionProperty: "all",
-                    transitionDuration: "1s",
-                    transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-                    transitionDelay: "0.1s"
-                  }}
-                >
-                  We believe cuisine should disappear—leaving only the emotion, the memory, the moment when taste transcends the plate.
+                <h2 className="max-w-5xl text-pretty font-serif text-3xl font-light leading-[1.1] tracking-[-0.01em] text-foreground sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(60px)", transition: "all 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s" }}>
+                  Your Smile. Our Commitment.
                 </h2>
               </div>
 
-              {/* Supporting Content */}
-              <div className="grid md:grid-cols-2 gap-12 md:gap-20">
-                <div 
-                  className="space-y-6"
-                  style={{
-                    opacity: isVisible ? 1 : 0,
-                    transform: isVisible ? "translateY(0)" : "translateY(40px)",
-                    transitionProperty: "all",
-                    transitionDuration: "0.8s",
-                    transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-                    transitionDelay: "0.3s"
-                  }}
-                >
-                  <p className="text-lg md:text-xl leading-relaxed text-foreground/80">
-                    For over a decade, we've crafted dining experiences that respond to the rhythm of the seasons—the first asparagus of spring, the depth of autumn truffles, the purity of winter citrus.
-                  </p>
-                </div>
-                <div 
-                  className="space-y-6"
-                  style={{
-                    opacity: isVisible ? 1 : 0,
-                    transform: isVisible ? "translateY(0)" : "translateY(40px)",
-                    transitionProperty: "all",
-                    transitionDuration: "0.8s",
-                    transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-                    transitionDelay: "0.4s"
-                  }}
-                >
-                  <p className="text-lg md:text-xl leading-relaxed text-foreground/80">
-                    Our work isn't about culinary statements. It's about creating moments where you feel most present—meals that linger in memory and transform how you understand flavor.
-                  </p>
-                </div>
+              <div className="grid gap-12 md:grid-cols-2 md:gap-20">
+                <p className="text-lg leading-relaxed text-foreground/80 md:text-xl" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(40px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s" }}>
+                  Metro Dental Clinic brings together trusted experience, modern diagnostics, and calm communication so every visit feels clear and reassuring.
+                </p>
+                <p className="text-lg leading-relaxed text-foreground/80 md:text-xl" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(40px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s" }}>
+                  From preventive checkups to laser-assisted treatments and implants, our team focuses on precision, comfort, and long-term oral health.
+                </p>
               </div>
 
-              {/* Stats */}
-              <div 
-                className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 pt-8 border-t border-border"
-                style={{
-                  opacity: isVisible ? 1 : 0,
-                  transform: isVisible ? "translateY(0)" : "translateY(30px)",
-                  transitionProperty: "all",
-                  transitionDuration: "0.8s",
-                  transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-                  transitionDelay: "0.5s"
-                }}
-              >
-                {[
-                  { value: "12", label: "Years of Excellence" },
-                  { value: "3", label: "Michelin Stars" },
-                  { value: "24", label: "Seasonal Menus" },
-                  { value: "100+", label: "Signature Creations" },
-                ].map((stat, index) => (
-                  <div key={stat.label} className="my-0 space-x-0 leading-5">
-                    <span className="text-4xl md:text-5xl font-light text-foreground font-sans lg:text-8xl">
-                      {stat.value}
+              <div className="grid grid-cols-2 gap-8 border-t border-border pt-8 md:grid-cols-4 md:gap-12" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(30px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s" }}>
+                {stats.map((stat) => (
+                  <div key={stat.label} className="space-y-2 leading-5">
+                    <span className="font-sans text-4xl font-light text-foreground md:text-5xl lg:text-8xl">
+                      <CountUp value={stat.value} suffix={stat.suffix} active={isVisible} />
                     </span>
-                    <p className="text-xs tracking-[0.15em] uppercase text-muted-foreground">
-                      {stat.label}
-                    </p>
+                    <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -146,18 +95,7 @@ export function VisionSection() {
         </div>
       </div>
 
-      {/* Decorative Line */}
-      <div 
-        className="absolute bottom-0 left-6 md:left-12 lg:left-20 right-6 md:right-12 lg:right-20 h-px bg-border"
-        style={{
-          transform: isVisible ? "scaleX(1)" : "scaleX(0)",
-          transformOrigin: "left",
-          transitionProperty: "transform",
-          transitionDuration: "1.5s",
-          transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
-          transitionDelay: "0.6s"
-        }}
-      />
+      <div className="absolute bottom-0 left-6 right-6 h-px bg-border md:left-12 md:right-12 lg:left-20 lg:right-20" style={{ transform: isVisible ? "scaleX(1)" : "scaleX(0)", transformOrigin: "left", transition: "transform 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.6s" }} />
     </section>
   )
 }

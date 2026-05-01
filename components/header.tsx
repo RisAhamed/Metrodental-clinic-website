@@ -1,145 +1,111 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
+
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "Testimonials", href: "/testimonials" },
+  { label: "Contact Us", href: "/contact" },
+]
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
+    const handleScroll = () => setIsScrolled(window.scrollY > 50)
+    handleScroll()
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const navItems = [
-    { label: "Vision", href: "#vision" },
-    { label: "Philosophy", href: "#philosophy" },
-    { label: "Experience", href: "#experience" },
-    { label: "Signature", href: "#dishes" },
-    { label: "Reservations", href: "#contact" },
-  ]
-
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-out",
-        isScrolled 
-          ? "bg-background/95 backdrop-blur-sm border-b border-border" 
-          : "bg-transparent"
+        "fixed left-0 right-0 top-0 z-50 transition-all duration-700 ease-out",
+        isScrolled ? "border-b border-border bg-background/85 shadow-sm backdrop-blur-md" : "bg-transparent",
       )}
     >
-      <div className="max-w-[1800px] mx-auto px-6 md:px-12 lg:px-20">
-        <div className="flex items-center justify-between h-20 md:h-24">
-          {/* Logo */}
-          <Link 
-            href="/" 
-            className="relative group"
-          >
-            <span className="font-serif text-2xl md:text-3xl font-light tracking-[0.2em] text-foreground">
-              ESSENCE
+      <div className="mx-auto max-w-[1800px] px-6 md:px-12 lg:px-20">
+        <div className="flex h-20 items-center justify-between md:h-24">
+          <Link href="/" className="group relative" onClick={() => setIsMobileMenuOpen(false)}>
+            <span className="font-serif text-xl font-light tracking-[0.16em] text-foreground md:text-3xl">
+              METRO DENTAL
             </span>
-            <span className="absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-500 group-hover:w-full" />
+            <span className="absolute -bottom-1 left-0 h-px w-0 bg-foreground transition-all duration-500 group-hover:w-full" />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-12">
+          <nav className="hidden items-center gap-12 lg:flex">
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="relative group text-sm tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors duration-300"
+                className="group relative text-sm uppercase tracking-[0.15em] text-muted-foreground transition-colors duration-300 hover:text-foreground"
               >
                 {item.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
 
-          {/* CTA Button */}
           <div className="hidden lg:block">
             <Link
-              href="#contact"
-              className="inline-flex items-center gap-2 px-6 py-3 text-sm tracking-[0.1em] uppercase text-primary-foreground bg-primary hover:bg-primary/90 transition-all duration-300"
+              href="/#contact"
+              className="inline-flex items-center gap-2 bg-primary px-6 py-3 text-sm uppercase tracking-[0.1em] text-primary-foreground transition-all duration-300 hover:bg-primary/90"
             >
-              <span>Reserve</span>
-              <svg 
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
+              <span>Book Appointment</span>
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden relative w-10 h-10 flex items-center justify-center"
+            className="relative flex h-10 w-10 items-center justify-center lg:hidden"
             aria-label="Toggle menu"
           >
             <div className="flex flex-col gap-1.5">
-              <span 
-                className={cn(
-                  "w-6 h-px bg-foreground transition-all duration-300",
-                  isMobileMenuOpen && "rotate-45 translate-y-[4px]"
-                )} 
-              />
-              <span 
-                className={cn(
-                  "w-6 h-px bg-foreground transition-all duration-300",
-                  isMobileMenuOpen && "-rotate-45 -translate-y-[3px]"
-                )} 
-              />
+              <span className={cn("h-px w-6 bg-foreground transition-all duration-300", isMobileMenuOpen && "translate-y-[4px] rotate-45")} />
+              <span className={cn("h-px w-6 bg-foreground transition-all duration-300", isMobileMenuOpen && "-translate-y-[3px] -rotate-45")} />
             </div>
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div
         className={cn(
-          "lg:hidden fixed inset-0 bg-background transition-all duration-500 ease-out",
-          isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          "fixed inset-0 top-20 bg-background transition-all duration-500 ease-out lg:hidden",
+          isMobileMenuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
         )}
-        style={{ top: isScrolled ? "81px" : "80px" }}
       >
-        <nav className="flex flex-col items-center justify-center h-full gap-8 pb-20">
+        <nav className="flex h-full flex-col items-center justify-center gap-8 pb-20">
           {navItems.map((item, index) => (
             <Link
               key={item.label}
               href={item.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="text-2xl font-serif tracking-[0.1em] text-foreground hover:text-accent transition-colors duration-300"
-              style={{ 
+              className="font-serif text-2xl tracking-[0.1em] text-foreground transition-colors duration-300 hover:text-accent"
+              style={{
                 transitionDelay: isMobileMenuOpen ? `${index * 50}ms` : "0ms",
                 transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
                 opacity: isMobileMenuOpen ? 1 : 0,
-                transition: "all 0.5s ease-out"
+                transition: "all 0.5s ease-out",
               }}
             >
               {item.label}
             </Link>
           ))}
           <Link
-            href="#contact"
+            href="/#contact"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="mt-8 px-8 py-4 text-sm tracking-[0.1em] uppercase text-primary-foreground bg-primary"
-            style={{ 
-              transitionDelay: isMobileMenuOpen ? `${navItems.length * 50}ms` : "0ms",
-              transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
-              opacity: isMobileMenuOpen ? 1 : 0,
-              transition: "all 0.5s ease-out"
-            }}
+            className="mt-8 bg-primary px-8 py-4 text-sm uppercase tracking-[0.1em] text-primary-foreground"
           >
-            Reserve Table
+            Book Appointment
           </Link>
         </nav>
       </div>

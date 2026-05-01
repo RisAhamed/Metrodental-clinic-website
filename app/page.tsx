@@ -1,11 +1,11 @@
-import { Header } from "@/components/header"
-import { HeroSection } from "@/components/sections/hero"
-import { VisionSection } from "@/components/sections/vision"
-import { PhilosophySection } from "@/components/sections/philosophy"
-import { ExperienceSection } from "@/components/sections/experience"
-import { DishesSection } from "@/components/sections/dishes"
-import { ContactSection } from "@/components/sections/contact"
 import { Footer } from "@/components/footer"
+import { Header } from "@/components/header"
+import { DishesSection } from "@/components/sections/dishes"
+import { ExperienceSection } from "@/components/sections/experience"
+import { HeroSection } from "@/components/sections/hero"
+import { PhilosophySection } from "@/components/sections/philosophy"
+import { ContactPreview, TestimonialsCarousel } from "@/components/sections/testimonials-contact"
+import { VisionSection } from "@/components/sections/vision"
 
 export default function Home() {
   return (
@@ -16,7 +16,8 @@ export default function Home() {
       <PhilosophySection />
       <ExperienceSection />
       <DishesSection />
-      <ContactSection />
+      <TestimonialsCarousel />
+      <ContactPreview />
       <Footer />
     </main>
   )
