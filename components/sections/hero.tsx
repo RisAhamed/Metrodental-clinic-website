@@ -41,7 +41,7 @@ export function HeroSection() {
         <div className="absolute left-0 top-[40%] h-px w-full bg-foreground/5" style={{ transform: `translateX(${scrollY * 0.05}px)` }} />
       </div>
 
-      <div className="relative z-20 mx-auto w-full max-w-[1800px] px-6 pb-16 md:px-12 md:pb-24 lg:px-20 lg:pb-32">
+      {/* <div className="relative z-20 mx-auto w-full max-w-[1800px] px-6 pb-16 md:px-12 md:pb-24 lg:px-20 lg:pb-32">
         <div className="grid items-end gap-8 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-8">
             <div className="overflow-hidden">
@@ -58,7 +58,28 @@ export function HeroSection() {
                 <span className="block text-accent italic">precision & warmth.</span>
               </h1>
             </div>
-          </div>
+          </div> */}
+{/* Change z-20 to z-30 and add pt-32 to protect the top area */}
+<div className="relative z-30 mx-auto w-full max-w-[1800px] px-6 pb-16 pt-32 md:px-12 md:pb-24 lg:px-20 lg:pb-32">
+  <div className="grid items-end gap-8 lg:grid-cols-12 lg:gap-12">
+    <div className="lg:col-span-8">
+      <div className="overflow-hidden">
+        <h1
+          className="font-serif text-5xl font-light leading-[1.1] tracking-[-0.02em] text-foreground sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl"
+          style={{
+            transform: isLoaded ? "translateY(0)" : "translateY(100%)",
+            opacity: isLoaded ? 1 : 0,
+            transition: "all 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s",
+          }}
+        >
+          {/* Use whitespace-normal to ensure it wraps correctly on small screens */}
+          <span className="block whitespace-normal text-pretty">Advanced dental care</span>
+          <span className="block whitespace-normal text-pretty">crafted with</span>
+          <span className="block whitespace-normal text-accent italic">precision & warmth.</span>
+        </h1>
+      </div>
+    </div>
+    {/* ... rest of the code ... */}
 
           <div className="lg:col-span-4 lg:pb-4">
             <div
