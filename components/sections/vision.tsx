@@ -2,65 +2,73 @@
 
 import { useEffect, useRef, useState } from "react"
 
-function CountUp({ value, suffix = "", active }: { value: number; suffix?: string; active: boolean }) {
+function useCountUp(target: number, duration: number = 2000) {
   const [count, setCount] = useState(0)
+  const [hasStarted, setHasStarted] = useState(false)
 
   useEffect(() => {
-    if (!active) return
-    let frame = 0
-    const totalFrames = 80
-    const start = performance.now()
-    const tick = (time: number) => {
-      const progress = Math.min((time - start) / 1600, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setCount(Math.round(value * eased))
-      frame += 1
-      if (progress < 1 && frame < totalFrames + 20) requestAnimationFrame(tick)
+    if (!hasStarted) return
+    let startTime: number | null = null
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp
+      const progress = Math.min((timestamp - startTime) / duration, 1)
+      setCount(Math.floor(progress * target))
+      if (progress < 1) requestAnimationFrame(step)
     }
-    requestAnimationFrame(tick)
-  }, [active, value])
+    requestAnimationFrame(step)
+  }, [hasStarted, target, duration])
 
-  return <>{count.toLocaleString("en-IN")}{suffix}</>
+  return { count, start: () => setHasStarted(true), hasStarted }
 }
 
-function StatCardWithLocations({ value, suffix, label, active }: { value: number; suffix: string; label: string; active: boolean }) {
-  const [showLocations, setShowLocations] = useState(false)
+function StatCard({ value, suffix, label, duration = 2000, showLocations = false }: { value: number; suffix: string; label: string; duration?: number; showLocations?: boolean }) {
+  const { count, start, hasStarted } = useCountUp(value, duration)
+  const [locVisible, setLocVisible] = useState(false)
 
   useEffect(() => {
-    if (active) {
-      const timer = setTimeout(() => setShowLocations(true), 1600)
+    if (hasStarted && showLocations) {
+      const timer = setTimeout(() => setLocVisible(true), duration + 300)
       return () => clearTimeout(timer)
     }
-  }, [active])
+  }, [hasStarted, showLocations, duration])
+
+  useEffect(() => {
+    start()
+  }, [start])
 
   return (
     <div className="space-y-2 leading-5">
-      <span className="font-sans text-4xl font-light text-foreground md:text-5xl lg:text-8xl">
-        <CountUp value={value} suffix={suffix} active={active} />
+      <span 
+        className="font-sans font-light text-foreground"
+        style={{ fontSize: "clamp(2rem, 4vw, 5rem)" }}
+      >
+        {count.toLocaleString("en-IN")}{suffix}
       </span>
-      <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground">{label}</p>
-      <div className="space-y-0.5 overflow-hidden pt-1">
-        <p
-          className="text-xs tracking-wide text-muted-foreground/70"
-          style={{
-            opacity: showLocations ? 1 : 0,
-            transform: showLocations ? "translateY(0)" : "translateY(4px)",
-            transition: "all 0.5s ease-out 0.3s",
-          }}
-        >
-          Kodambakkam
-        </p>
-        <p
-          className="text-xs tracking-wide text-muted-foreground/70"
-          style={{
-            opacity: showLocations ? 1 : 0,
-            transform: showLocations ? "translateY(0)" : "translateY(4px)",
-            transition: "all 0.5s ease-out 0.6s",
-          }}
-        >
-          Mylapore
-        </p>
-      </div>
+      <p className="text-[10px] sm:text-xs tracking-widest uppercase text-muted-foreground mt-2 leading-tight">{label}</p>
+      {showLocations && (
+        <div className="space-y-0.5 overflow-hidden pt-1">
+          <p
+            className="text-xs tracking-wide text-muted-foreground/70"
+            style={{
+              opacity: locVisible ? 1 : 0,
+              transform: locVisible ? "translateY(0)" : "translateY(4px)",
+              transition: "all 0.5s ease-out 0.3s",
+            }}
+          >
+            Kodambakkam
+          </p>
+          <p
+            className="text-xs tracking-wide text-muted-foreground/70"
+            style={{
+              opacity: locVisible ? 1 : 0,
+              transform: locVisible ? "translateY(0)" : "translateY(4px)",
+              transition: "all 0.5s ease-out 0.6s",
+            }}
+          >
+            Mylapore
+          </p>
+        </div>
+      )}
     </div>
   )
 }
@@ -75,11 +83,11 @@ export function VisionSection() {
     return () => observer.disconnect()
   }, [])
 
-const stats = [
-    { value: 22, suffix: "+", label: "Years of Experience" },
-    { value: 20000, suffix: "+", label: "Happy Patients" },
-    { value: 20, suffix: "+", label: "Dental Services" },
-    { value: 2, suffix: "", label: "Prime Clinic Locations in Chennai", isLocationStat: true },
+  const stats = [
+    { value: 22, suffix: "+", label: "Years of Experience", duration: 2000 },
+    { value: 20000, suffix: "+", label: "Happy Patients", duration: 2000 },
+    { value: 20, suffix: "+", label: "Dental Services", duration: 2000 },
+    { value: 2, suffix: "", label: "Prime Clinic Locations in Chennai", duration: 300, showLocations: true },
   ]
 
   return (
@@ -113,27 +121,11 @@ const stats = [
                 </h2>
               </div>
 
-              <div className="grid gap-12 md:grid-cols-2 md:gap-20">
-                <p className="text-lg leading-relaxed text-foreground/80 md:text-xl" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(40px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s" }}>
-                  Metro Dental Clinic brings together trusted experience, modern diagnostics, and calm communication so every visit feels clear and reassuring.
-                </p>
-                <p className="text-lg leading-relaxed text-foreground/80 md:text-xl" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(40px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s" }}>
-                  From preventive checkups to laser-assisted treatments and implants, our team focuses on precision, comfort, and long-term oral health.
-                </p>
-              </div>
-
-<div className="grid grid-cols-2 gap-8 border-t border-border pt-8 md:grid-cols-4 md:gap-12" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(30px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s" }}>
+              <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-y-8 border-t border-border pt-8" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(30px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s" }}>
                 {stats.map((stat) => (
-                  stat.isLocationStat ? (
-                    <StatCardWithLocations key={stat.label} value={stat.value} suffix={stat.suffix} label={stat.label} active={isVisible} />
-                  ) : (
-                    <div key={stat.label} className="space-y-2 leading-5">
-                      <span className="font-sans text-4xl font-light text-foreground md:text-5xl lg:text-8xl">
-                        <CountUp value={stat.value} suffix={stat.suffix} active={isVisible} />
-                      </span>
-                      <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground">{stat.label}</p>
-                    </div>
-                  )
+                  <div key={stat.label} className="min-w-0 overflow-hidden word-break-break-word">
+                    <StatCard value={stat.value} suffix={stat.suffix} label={stat.label} duration={stat.duration} showLocations={stat.showLocations} />
+                  </div>
                 ))}
               </div>
             </div>
