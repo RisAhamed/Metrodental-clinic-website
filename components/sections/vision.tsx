@@ -23,6 +23,48 @@ function CountUp({ value, suffix = "", active }: { value: number; suffix?: strin
   return <>{count.toLocaleString("en-IN")}{suffix}</>
 }
 
+function StatCardWithLocations({ value, suffix, label, active }: { value: number; suffix: string; label: string; active: boolean }) {
+  const [showLocations, setShowLocations] = useState(false)
+
+  useEffect(() => {
+    if (active) {
+      const timer = setTimeout(() => setShowLocations(true), 1600)
+      return () => clearTimeout(timer)
+    }
+  }, [active])
+
+  return (
+    <div className="space-y-2 leading-5">
+      <span className="font-sans text-4xl font-light text-foreground md:text-5xl lg:text-8xl">
+        <CountUp value={value} suffix={suffix} active={active} />
+      </span>
+      <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground">{label}</p>
+      <div className="space-y-0.5 overflow-hidden pt-1">
+        <p
+          className="text-xs tracking-wide text-muted-foreground/70"
+          style={{
+            opacity: showLocations ? 1 : 0,
+            transform: showLocations ? "translateY(0)" : "translateY(4px)",
+            transition: "all 0.5s ease-out 0.3s",
+          }}
+        >
+          Kodambakkam
+        </p>
+        <p
+          className="text-xs tracking-wide text-muted-foreground/70"
+          style={{
+            opacity: showLocations ? 1 : 0,
+            transform: showLocations ? "translateY(0)" : "translateY(4px)",
+            transition: "all 0.5s ease-out 0.6s",
+          }}
+        >
+          Mylapore
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export function VisionSection() {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
@@ -33,11 +75,11 @@ export function VisionSection() {
     return () => observer.disconnect()
   }, [])
 
-  const stats = [
+const stats = [
     { value: 22, suffix: "+", label: "Years of Experience" },
-    { value: 10000, suffix: "+", label: "Happy Patients" },
+    { value: 20000, suffix: "+", label: "Happy Patients" },
     { value: 20, suffix: "+", label: "Dental Services" },
-    { value: 2, suffix: "", label: "Clinic Locations" },
+    { value: 2, suffix: "", label: "Prime Clinic Locations in Chennai", isLocationStat: true },
   ]
 
   return (
@@ -80,14 +122,18 @@ export function VisionSection() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-8 border-t border-border pt-8 md:grid-cols-4 md:gap-12" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(30px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s" }}>
+<div className="grid grid-cols-2 gap-8 border-t border-border pt-8 md:grid-cols-4 md:gap-12" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(30px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s" }}>
                 {stats.map((stat) => (
-                  <div key={stat.label} className="space-y-2 leading-5">
-                    <span className="font-sans text-4xl font-light text-foreground md:text-5xl lg:text-8xl">
-                      <CountUp value={stat.value} suffix={stat.suffix} active={isVisible} />
-                    </span>
-                    <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground">{stat.label}</p>
-                  </div>
+                  stat.isLocationStat ? (
+                    <StatCardWithLocations key={stat.label} value={stat.value} suffix={stat.suffix} label={stat.label} active={isVisible} />
+                  ) : (
+                    <div key={stat.label} className="space-y-2 leading-5">
+                      <span className="font-sans text-4xl font-light text-foreground md:text-5xl lg:text-8xl">
+                        <CountUp value={stat.value} suffix={stat.suffix} active={isVisible} />
+                      </span>
+                      <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground">{stat.label}</p>
+                    </div>
+                  )
                 ))}
               </div>
             </div>

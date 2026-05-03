@@ -65,7 +65,7 @@ export function HeroSection() {
     <div className="lg:col-span-8">
       <div className="overflow-hidden">
         <h1
-          className="font-serif text-5xl font-light leading-[1.1] tracking-[-0.02em] text-foreground sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl"
+          className="font-serif text-4xl font-light leading-[1.1] tracking-[-0.02em] text-foreground sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl"
           style={{
             transform: isLoaded ? "translateY(0)" : "translateY(100%)",
             opacity: isLoaded ? 1 : 0,

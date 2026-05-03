@@ -22,10 +22,22 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = ""
+    }
+
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [isMobileMenuOpen])
+
   return (
     <header
       className={cn(
-        "fixed left-0 right-0 top-0 z-50 transition-all duration-700 ease-out",
+        "fixed left-0 right-0 top-0 z-[100] transition-all duration-700 ease-out",
         isScrolled ? "border-b border-border bg-background/85 shadow-sm backdrop-blur-md" : "bg-transparent",
       )}
     >
@@ -66,8 +78,9 @@ export function Header() {
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="relative flex h-10 w-10 items-center justify-center lg:hidden"
+            className="relative flex h-11 w-11 items-center justify-center bg-background/70 backdrop-blur-sm lg:hidden"
             aria-label="Toggle menu"
+            aria-expanded={isMobileMenuOpen}
           >
             <div className="flex flex-col gap-1.5">
               <span className={cn("h-px w-6 bg-foreground transition-all duration-300", isMobileMenuOpen && "translate-y-[4px] rotate-45")} />
@@ -77,24 +90,48 @@ export function Header() {
         </div>
       </div>
 
-      <div
+      <button
+        type="button"
+        aria-label="Close menu"
+        onClick={() => setIsMobileMenuOpen(false)}
         className={cn(
-          "fixed inset-0 top-20 bg-background transition-all duration-500 ease-out lg:hidden",
+          "fixed inset-0 z-[110] bg-black/50 transition-opacity duration-500 ease-out lg:hidden",
           isMobileMenuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
         )}
+      />
+
+      <aside
+        className={cn(
+          "fixed right-0 top-0 z-[120] h-[100dvh] w-[min(80vw,320px)] min-w-[280px] bg-background p-6 shadow-2xl transition-transform duration-500 ease-out lg:hidden",
+          isMobileMenuOpen ? "translate-x-0" : "translate-x-full",
+        )}
+        aria-hidden={!isMobileMenuOpen}
       >
-        <nav className="flex h-full flex-col items-center justify-center gap-8 pb-20">
+        <div className="mb-8 flex items-center justify-between gap-4">
+          <Link href="/" className="font-serif text-xl font-light tracking-[0.16em] text-foreground" onClick={() => setIsMobileMenuOpen(false)}>
+            METRO DENTAL
+          </Link>
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex h-11 w-11 items-center justify-center text-3xl leading-none text-foreground"
+            aria-label="Close menu"
+          >
+            ×
+          </button>
+        </div>
+
+        <nav className="flex flex-col">
           {navItems.map((item, index) => (
             <Link
               key={item.label}
               href={item.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="font-serif text-2xl tracking-[0.1em] text-foreground transition-colors duration-300 hover:text-accent"
+              className="border-b border-border py-3 font-serif text-xl tracking-[0.1em] text-foreground transition-colors duration-300 hover:text-accent"
               style={{
-                transitionDelay: isMobileMenuOpen ? `${index * 50}ms` : "0ms",
                 transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
                 opacity: isMobileMenuOpen ? 1 : 0,
-                transition: "all 0.5s ease-out",
+                transition: `all 0.5s ease-out ${isMobileMenuOpen ? index * 50 : 0}ms`,
               }}
             >
               {item.label}
@@ -103,12 +140,12 @@ export function Header() {
           <Link
             href="/#contact"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="mt-8 bg-primary px-8 py-4 text-sm uppercase tracking-[0.1em] text-primary-foreground"
+            className="mt-8 inline-flex min-h-11 items-center justify-center bg-primary px-8 py-4 text-sm uppercase tracking-[0.1em] text-primary-foreground"
           >
             Book Appointment
           </Link>
         </nav>
-      </div>
+      </aside>
     </header>
   )
 }

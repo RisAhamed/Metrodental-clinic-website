@@ -43,8 +43,7 @@ export function ExperienceSection() {
                 <div style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(40px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s" }}>
                   <p className="mb-4 text-xs uppercase tracking-[0.3em] text-muted-foreground">22 Years of Experience</p>
                   <h2 className="text-pretty font-serif text-3xl font-light leading-[1.1] tracking-[-0.01em] text-foreground sm:text-4xl md:text-5xl lg:text-6xl">Dr. S. M. Ameerdeen</h2>
-                  <p className="mt-4 text-lg text-accent">BDS, General Dental Surgeon</p>
-                  <a href="tel:+919940552292" className="mt-2 inline-block text-foreground transition-colors duration-300 hover:text-accent">99405 52292</a>
+<p className="mt-4 text-lg text-accent">BDS, General Dental Surgeon</p>
                 </div>
 
                 <div className="space-y-5 text-base leading-relaxed text-muted-foreground md:text-lg" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(30px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s" }}>
