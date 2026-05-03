@@ -10,7 +10,7 @@ export const branches = [
       { label: "78248 24722", href: "tel:+917824824722" },
     ],
     whatsapp: "https://wa.me/917824824722",
-    map: "https://www.google.com/maps/place/Metro+Dental+Clinic+KODAMBAKKAM/@13.0529614,80.219322,17z/data=!3m1!4b1!4m6!3m5!1s0x3a5266edbea3f995:0xddf6839888f10a81!8m2!3d13.0529614!4d80.219322",
+    map: "https://www.google.com/maps/place/Metro+Dental+Clinic+KODAMBAKKAM/@13.0529614,80.219322,17z/data=!3m1!4b1!4m6!3m5!1s0x3a5266edbea3f995:0xddf6839888f10a81!8m2!3d13.0529614!4d80.219322!16s%2Fg%2F1tdk8hfh?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D",
     embed: "https://www.google.com/maps?q=Metro%20Dental%20Clinic%20Kodambakkam%20Chennai&output=embed",
   },
   {
