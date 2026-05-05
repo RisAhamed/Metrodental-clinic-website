@@ -44,7 +44,7 @@ export function ContactPreview() {
     <section id="contact" className="relative overflow-hidden bg-secondary py-32 md:py-48">
       <div className="mx-auto max-w-[1800px] px-6 md:px-12 lg:px-20">
         <div className="mb-16 grid gap-12 lg:grid-cols-12 lg:gap-20">
-          <div className="lg:col-span-2"><div className="flex items-center gap-4"><span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">(06)</span><div className="h-px w-8 bg-border" /><span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Contact</span></div></div>
+          <div className="lg:col-span-2"><div className="flex items-center gap-4"><span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">(07)</span><div className="h-px w-8 bg-border" /><span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Contact</span></div></div>
           <div className="lg:col-span-10"><h2 className="max-w-4xl text-pretty font-serif text-3xl font-light leading-[1.1] tracking-[-0.01em] text-foreground sm:text-4xl md:text-5xl lg:text-6xl">Visit Metro Dental Clinic in Kodambakkam or Mylapore</h2></div>
         </div>
         <div className="grid gap-8 lg:grid-cols-2">
