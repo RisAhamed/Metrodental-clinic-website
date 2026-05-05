@@ -37,16 +37,16 @@ function StatCard({ value, suffix, label, duration = 2000, showLocations = false
   }, [start])
 
   return (
-    <div className="space-y-2 leading-5">
+    <div className="space-y-2 leading-5 min-h-[140px] md:min-h-[160px]">
       <span 
-        className="font-sans font-light text-foreground"
+        className="font-sans font-light text-foreground block"
         style={{ fontSize: "clamp(2rem, 4vw, 5rem)" }}
       >
         {count.toLocaleString("en-IN")}{suffix}
       </span>
-      <p className="text-[10px] sm:text-xs tracking-widest uppercase text-muted-foreground mt-2 leading-tight">{label}</p>
+      <p className="text-xs sm:text-sm tracking-widest uppercase text-muted-foreground mt-2">{label}</p>
       {showLocations && (
-        <div className="space-y-0.5 overflow-hidden pt-1">
+        <div className="space-y-0.5 pt-1">
           <p
             className="text-xs tracking-wide text-muted-foreground/70"
             style={{
@@ -91,7 +91,7 @@ export function VisionSection() {
   ]
 
   return (
-    <section ref={sectionRef} id="stats" className="relative overflow-hidden py-32 md:py-48 lg:py-64">
+    <section ref={sectionRef} id="stats" className="relative overflow-hidden py-24 md:py-32 lg:py-40">
       <div className="pointer-events-none absolute inset-0">
         <svg className="absolute left-0 top-0 h-full w-full opacity-[0.03]" viewBox="0 0 100 100" preserveAspectRatio="none">
           <defs>
@@ -121,9 +121,9 @@ export function VisionSection() {
                 </h2>
               </div>
 
-              <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-y-8 border-t border-border pt-8" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(30px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s" }}>
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4 lg:grid-cols-4 gap-y-8 border-t border-border pt-8" style={{ opacity: isVisible ? 1 : 0, transform: isVisible ? "translateY(0)" : "translateY(30px)", transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s" }}>
                 {stats.map((stat) => (
-                  <div key={stat.label} className="min-w-0 overflow-hidden word-break-break-word">
+                  <div key={stat.label} className="min-w-0">
                     <StatCard value={stat.value} suffix={stat.suffix} label={stat.label} duration={stat.duration} showLocations={stat.showLocations} />
                   </div>
                 ))}
