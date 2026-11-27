@@ -2,7 +2,17 @@
 
 import Link from "next/link"
 import { branches } from "@/lib/dental-data"
+import { storeUrl } from "@/lib/site"
 import { Phone } from "lucide-react"
+
+const quickLinks = [
+  { label: "Home", href: "/", external: false },
+  { label: "Services", href: "/services", external: false },
+  { label: "Testimonials", href: "/testimonials", external: false },
+  { label: "Contact", href: "/contact", external: false },
+  { label: "My Account", href: "/account", external: false },
+  ...(storeUrl ? [{ label: "Shop & Appointments", href: storeUrl, external: true }] : []),
+]
 
 export function Footer() {
   return (
@@ -16,7 +26,13 @@ export function Footer() {
           <div className="lg:col-span-2">
             <h4 className="mb-6 text-xs uppercase tracking-[0.2em] text-muted-foreground">Quick Links</h4>
             <nav className="space-y-4">
-              {[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }, { label: "Testimonials", href: "/testimonials" }, { label: "Contact", href: "/contact" }].map((item) => <Link key={item.label} href={item.href} className="block text-sm text-foreground/70 transition-colors duration-300 hover:text-foreground">{item.label}</Link>)}
+              {quickLinks.map((item) =>
+                item.external ? (
+                  <a key={item.label} href={item.href} className="block text-sm text-foreground/70 transition-colors duration-300 hover:text-foreground">{item.label}</a>
+                ) : (
+                  <Link key={item.label} href={item.href} className="block text-sm text-foreground/70 transition-colors duration-300 hover:text-foreground">{item.label}</Link>
+                ),
+              )}
             </nav>
           </div>
           <div className="lg:col-span-2">

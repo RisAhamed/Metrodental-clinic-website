@@ -2,10 +2,12 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { DesktopAuthNav, MobileAuthNav } from "@/components/auth-nav"
 import { cn } from "@/lib/utils"
 
 const navItems = [
   { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "Pricing", href: "/pricing" },
   { label: "Testimonials", href: "/testimonials" },
@@ -45,18 +47,18 @@ export function Header() {
       <div className="mx-auto max-w-[1800px] px-6 md:px-12 lg:px-20">
         <div className="flex h-20 items-center justify-between md:h-24">
           <Link href="/" className="group relative" onClick={() => setIsMobileMenuOpen(false)}>
-            <span className="font-serif text-xl font-light tracking-[0.16em] text-foreground md:text-3xl">
+            <span className="font-serif text-xl font-light tracking-[0.12em] text-foreground md:text-3xl lg:text-xl lg:tracking-[0.12em] xl:text-3xl xl:tracking-[0.16em]">
               METRO DENTAL
             </span>
             <span className="absolute -bottom-1 left-0 h-px w-0 bg-foreground transition-all duration-500 group-hover:w-full" />
           </Link>
 
-          <nav className="hidden items-center gap-12 lg:flex">
+          <nav className="hidden items-center gap-4 lg:flex xl:gap-10">
             {navItems.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
-                className="group relative text-sm uppercase tracking-[0.15em] text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                className="group relative text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors duration-300 hover:text-foreground xl:text-sm xl:tracking-[0.15em]"
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent transition-all duration-300 group-hover:w-full" />
@@ -64,10 +66,11 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="hidden lg:block">
+          <div className="hidden items-center gap-3 lg:flex xl:gap-5">
+            <DesktopAuthNav />
             <Link
               href="/#contact"
-              className="inline-flex items-center gap-2 bg-primary px-6 py-3 text-sm uppercase tracking-[0.1em] text-primary-foreground transition-all duration-300 hover:bg-primary/90"
+              className="hidden items-center gap-2 bg-primary px-6 py-3 text-sm uppercase tracking-[0.1em] text-primary-foreground transition-all duration-300 hover:bg-primary/90 xl:inline-flex"
             >
               <span>Book Appointment</span>
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -103,7 +106,7 @@ export function Header() {
 
       <aside
         className={cn(
-          "fixed right-0 top-0 z-[120] h-[100dvh] w-[min(80vw,320px)] min-w-[280px] bg-background p-6 shadow-2xl transition-transform duration-500 ease-out lg:hidden",
+          "fixed right-0 top-0 z-[120] h-[100dvh] w-[min(80vw,320px)] min-w-[280px] overflow-y-auto bg-background p-6 shadow-2xl transition-transform duration-500 ease-out lg:hidden",
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full",
         )}
         aria-hidden={!isMobileMenuOpen}
@@ -124,24 +127,25 @@ export function Header() {
 
         <nav className="flex flex-col">
           {navItems.map((item, index) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="border-b border-border py-3 font-serif text-xl tracking-[0.1em] text-foreground transition-colors duration-300 hover:text-accent"
-              style={{
-                transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
-                opacity: isMobileMenuOpen ? 1 : 0,
-                transition: `all 0.5s ease-out ${isMobileMenuOpen ? index * 50 : 0}ms`,
-              }}
-            >
-              {item.label}
-            </Link>
-          ))}
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="border-b border-border py-3 font-serif text-lg tracking-[0.1em] text-foreground transition-colors duration-300 hover:text-accent"
+                style={{
+                  transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
+                  opacity: isMobileMenuOpen ? 1 : 0,
+                  transition: `all 0.5s ease-out ${isMobileMenuOpen ? index * 50 : 0}ms`,
+                }}
+              >
+                {item.label}
+              </Link>
+            ))}
+          <MobileAuthNav onNavigate={() => setIsMobileMenuOpen(false)} />
           <Link
             href="/#contact"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="mt-8 inline-flex min-h-11 items-center justify-center bg-primary px-8 py-4 text-sm uppercase tracking-[0.1em] text-primary-foreground"
+            className="mt-3 inline-flex min-h-11 items-center justify-center bg-primary px-8 py-4 text-sm uppercase tracking-[0.1em] text-primary-foreground"
           >
             Book Appointment
           </Link>

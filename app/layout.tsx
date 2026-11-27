@@ -1,8 +1,10 @@
 import React from "react"
 import type { Metadata } from "next"
+import { ClerkProvider } from "@clerk/nextjs"
 import { Cormorant_Garamond, DM_Sans, JetBrains_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { FloatingWhatsapp } from "@/components/floating-whatsapp"
+import { clerkAppearance } from "@/lib/clerk-appearance"
 import "./globals.css"
 
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans", weight: ["300", "400", "500", "600", "700"] })
@@ -56,9 +58,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${dmSans.variable} ${cormorant.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans antialiased">
-        {children}
-        <FloatingWhatsapp />
-        <Analytics />
+        <ClerkProvider appearance={clerkAppearance}>
+          {children}
+          <FloatingWhatsapp />
+          <Analytics />
+        </ClerkProvider>
       </body>
     </html>
   )
